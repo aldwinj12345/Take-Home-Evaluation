@@ -1,0 +1,410 @@
+{
+	"info": {
+		"_postman_id": "b4929ad8-d7e0-4dba-82fd-468d9462ab0b",
+		"name": "RapidPOS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42480683"
+	},
+	"item": [
+		{
+			"name": "Empty Username and Password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body contains 'Username and password are required.'\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Username and password are required.\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is empty\", function () {\r",
+							"    pm.expect(pm.response.text()).to.equal(\"\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is within limit (e.g., < 2000ms)\", function () {\r",
+							"    const maxResponseTime = 2000; // Define a more lenient limit\r",
+							"    const responseTime = pm.response.responseTime;\r",
+							"    pm.expect(responseTime).to.be.below(maxResponseTime, `Response time was ${responseTime}ms, which exceeds the lenient limit of ${maxResponseTime}ms`);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response headers\", function () {\r",
+							"    //pm.response.to.have.header('Content-Type');\r",
+							"    //pm.expect(pm.response.headers.get('Content-Type')).to.equal('application/json; charset=utf-8');\r",
+							"\r",
+							"    pm.response.to.have.header('Server');\r",
+							"    pm.expect(pm.response.headers.get('Server')).to.include('cloudflare'); // Using include in case the version is also present\r",
+							"\r",
+							"    pm.response.to.have.header('Connection');\r",
+							"    pm.expect(pm.response.headers.get('Connection')).to.equal('keep-alive');\r",
+							"\r",
+							"   \r",
+							"});\r",
+							"\r",
+							"//i made this while i was trying to figure it out all the headers\r",
+							"pm.test(\"Log all response header names (for debugging)\", function () {\r",
+							"    const headers = pm.response.headers.all();\r",
+							"    const headerNames = headers.map(header => header.key);\r",
+							"    console.log(\"All Response Header Names:\", headerNames);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Validate response cookies (if any)\", function () {\r",
+							"    const cookies = pm.cookies.all();\r",
+							"\r",
+							"    if (cookies.length > 0) {\r",
+							"        console.log(\"Response cookies found:\", cookies);\r",
+							"        // If cookies are present, you can add specific validations for them here\r",
+							"        // Example: Check if a specific cookie exists\r",
+							"        pm.expect(pm.cookies.has('YourSessionCookieName')).to.be.true;\r",
+							"\r",
+							"        // Example: Check if a specific cookie has a value\r",
+							"        if (pm.cookies.has('YourSessionCookieName')) {\r",
+							"            pm.expect(pm.cookies.get('YourSessionCookieName')).to.be.a('string').and.to.not.be.empty;\r",
+							"        }\r",
+							"\r",
+							"        // Add more validations for other expected cookies and their properties\r",
+							"    } else {\r",
+							"        console.log(\"No response cookies found, which is acceptable based on 'if any'.\");\r",
+							"        // If no cookies, the test implicitly passes as no assertions within this block will fail.\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"\",\r\n    \"password\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://mockapi.rapidextras.com/login",
+					"protocol": "https",
+					"host": [
+						"mockapi",
+						"rapidextras",
+						"com"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 401\", function () {\r",
+							"    pm.response.to.have.status(401);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response body is empty\", function () {\r",
+							"    pm.expect(pm.response.text()).to.equal(\"\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"invaliduser@example.com\",\r\n    \"password\": \"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://mockapi.rapidextras.com/login",
+					"protocol": "https",
+					"host": [
+						"mockapi",
+						"rapidextras",
+						"com"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Malformed JSON Response",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response body is empty\", function () {\r",
+							"    pm.expect(pm.response.text()).to.equal(\"\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response should be malformed JSON\", function () {\r",
+							"    try {\r",
+							"        pm.response.json();\r",
+							"        pm.expect.fail(\"Response was successfully parsed as JSON, but expected malformed JSON.\");\r",
+							"    } catch (e) {\r",
+							"        pm.expect(e).to.be.an('error');\r",
+							"        pm.expect(e.message).to.include(\"Unexpected token\"); // Common error message for malformed JSON\r",
+							"        // You can add more specific error message checks if needed\r",
+							"    }\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"malformeduser@example.com\",\r\n    \"password\": \"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://mockapi.rapidextras.com/login",
+					"protocol": "https",
+					"host": [
+						"mockapi",
+						"rapidextras",
+						"com"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successful Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response body is empty\", function () {\r",
+							"    pm.expect(pm.response.text()).to.equal(\"\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response should be malformed JSON\", function () {\r",
+							"    try {\r",
+							"        pm.response.json();\r",
+							"        pm.expect.fail(\"Response was successfully parsed as JSON, but expected malformed JSON.\");\r",
+							"    } catch (e) {\r",
+							"        pm.expect(e).to.be.an('error');\r",
+							"        pm.expect(e.message).to.include(\"Unexpected token\"); // Common error message for malformed JSON\r",
+							"        // You can add more specific error message checks if needed\r",
+							"    }\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"malformeduser@example.com\",\r\n    \"password\": \"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://mockapi.rapidextras.com/login",
+					"protocol": "https",
+					"host": [
+						"mockapi",
+						"rapidextras",
+						"com"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Server Error username containing error",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500 Internal Server Error\", function () {\r",
+							"    pm.expect(pm.response.code).to.eql(500);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response body is empty\", function () {\r",
+							"    pm.expect(pm.response.text()).to.equal(\"\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"erroruser@example.com\",\r\n    \"password\": \"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://mockapi.rapidextras.com/login",
+					"protocol": "https",
+					"host": [
+						"mockapi",
+						"rapidextras",
+						"com"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Slow Resposne username containing slow",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is not empty\", function () {\r",
+							"    pm.expect(pm.response.text()).not.to.equal(\"\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response should take approximately 2 seconds\", async function () {\r",
+							"    const startTime = Date.now();\r",
+							"    await pm.sendRequest({\r",
+							"        url: pm.request.url.toString(),\r",
+							"        method: pm.request.method,\r",
+							"        header: pm.request.headers.all(),\r",
+							"        body: pm.request.body.toString() // Ensure body is sent if present\r",
+							"    });\r",
+							"    const endTime = Date.now();\r",
+							"    const responseTimeMs = endTime - startTime;\r",
+							"    const expectedDelayMs = 2000;\r",
+							"    const toleranceMs = 500; // Allow for some variation\r",
+							"\r",
+							"    pm.expect(responseTimeMs).to.be.at.least(expectedDelayMs - toleranceMs);\r",
+							"    pm.expect(responseTimeMs).to.be.at.most(expectedDelayMs + toleranceMs * 2); // Allow a bit more on the upper end for network variations\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"slowuser@example.com\",\r\n    \"password\": \"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://mockapi.rapidextras.com/login",
+					"protocol": "https",
+					"host": [
+						"mockapi",
+						"rapidextras",
+						"com"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
