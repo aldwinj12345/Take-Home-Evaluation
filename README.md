@@ -3,7 +3,8 @@ ALDWIN S. JUMAO-AS
 
 Personal Note: I admit that API testing is something I have not done for awhile and so I when did this, I made a research and surprise in one of the test cases regarding the malformed JSON response which happens to be the valid credentials.
 I was about to send email and ask for a valid credentials.
-Also, I uploaded a document of the test plan which is quite similar to the text below
+Also, I uploaded a document of the test plan which is quite similar to the text below.
+Lastly, I uploaded as well a collection of POST request which i made in Postman. you'll find it here in this repository where it is set to Public. the filename is " RapidPOS.postman_collection "
 
 1.Scope and Objectives
 	1.1	Test Scope
